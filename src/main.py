@@ -2,6 +2,8 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox as MessageBox
+from tkinter import filedialog
+
 import ttkbootstrap as ttk
 
 #pytube
@@ -20,14 +22,18 @@ def download():
         os.rename(out_path, new_name[0] + '.mp3') 
 
         MessageBox.showinfo('','Done!')
+        print('Finished')
     except:
         MessageBox.showerror('', 'Path or entry error!')
 
+def get_path():
+    filename = filedialog.askdirectory()
+    entry_path.insert(0,filename)
 
 #window
 window = ttk.Window()
 window.title('Youtube')
-window.geometry('400x250')
+window.geometry('540x320')
 
 #title
 titleFrame = ttk.Frame(window)
@@ -39,16 +45,16 @@ davi.pack(side = 'top')
 titleFrame.pack(pady = 30)
 
 #path
-path_frame = ttk.Frame(window)
+path_frame = ttk.Frame(window, width=500)
 entryPath = tk.StringVar()
-path = ttk.Label(path_frame,  text = 'Path:', font = 'Calibri 14')
+path = ttk.Button(path_frame,  text = 'Path:', command=get_path)
 entry_path = ttk.Entry(path_frame, textvariable= entryPath)
 
-path.pack(side = 'left')
+path.pack(side = 'left', padx=10)
 entry_path.pack(side = 'left')
 path_frame.pack()
 
-#input
+#input 
 imput_frame = ttk.Frame(window)
 entryString = tk.StringVar()
 entry = ttk.Entry(imput_frame, textvariable = entryString)
