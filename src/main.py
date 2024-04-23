@@ -16,8 +16,9 @@ def download():
         video = YouTube(url)#video
         print(f'Title: {video.title}')
         print('Dowloading...')
+        audio_video_selector = selection()
 
-        out_path = video.streams.filter(only_audio=True).first().download(entryPath.get())#download
+        out_path = video.streams.filter(only_audio=audio_video_selector).first().download(entryPath.get())#download
         new_name = os.path.splitext(out_path)#original name
         os.rename(out_path, new_name[0] + '.mp3') 
 
@@ -29,6 +30,14 @@ def download():
 def get_path():
     filename = filedialog.askdirectory()
     entry_path.insert(0,filename)
+
+def selection()->bool:
+    res = None
+    if var1.get == 1 and var2.get == 0:
+        res = True
+    elif var1.get() == 0 and var2.get() == 1:
+        res = False
+    return res
 
 #window
 window = ttk.Window()
@@ -45,11 +54,17 @@ davi.pack(side = 'top')
 titleFrame.pack(pady = 30)
 
 #path
-path_frame = ttk.Frame(window, width=500)
+path_frame = ttk.Frame(window, width=700)
 entryPath = tk.StringVar()
+var1 = tk.IntVar()
+var2 = tk.IntVar()
 path = ttk.Button(path_frame,  text = 'Path:', command=get_path)
 entry_path = ttk.Entry(path_frame, textvariable= entryPath)
+c1 = ttk.Checkbutton(path_frame, text="mp3",variable=var1, onvalue=1, offvalue=0, command=selection)
+c2 = ttk.Checkbutton(path_frame, text="mp4",variable=var2, onvalue=1, offvalue=0, command=selection)
 
+c1.pack(side="right")
+c2.pack(side="right")
 path.pack(side = 'left', padx=10)
 entry_path.pack(side = 'left')
 path_frame.pack()
