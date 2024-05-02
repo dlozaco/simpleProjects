@@ -10,9 +10,6 @@ import ttkbootstrap as ttk
 from pytube import YouTube
 import os
 
-#functions
-from functions import *
-
 class UI(ttk.Frame):
     def __init__(self, parent=None):
         ttk.Frame.__init__(self,parent)
@@ -37,9 +34,9 @@ class UI(ttk.Frame):
         var1 = tk.BooleanVar()
         var2 = tk.BooleanVar()
         entry_path = ttk.Entry(path_frame, textvariable= entryPath)
-        path = ttk.Button(path_frame,  text = 'Path:', command=get_path(entry_path))
-        c1 = ttk.Checkbutton(path_frame, text="mp4",variable=var1, onvalue=True, offvalue=False, command=selection)
-        c2 = ttk.Checkbutton(path_frame, text="mp3",variable=var2, onvalue=True, offvalue=False, command=selection)
+        path = ttk.Button(path_frame,  text = 'Path:', command=self.get_path)
+        c1 = ttk.Checkbutton(path_frame, text="mp4",variable=var1, onvalue=True, offvalue=False, command=self.selection)
+        c2 = ttk.Checkbutton(path_frame, text="mp3",variable=var2, onvalue=True, offvalue=False, command=self.selection)
 
         c1.pack(side="right")
         c2.pack(side="right")
@@ -47,10 +44,11 @@ class UI(ttk.Frame):
         entry_path.pack(side = 'left')
         path_frame.pack()
 
-        imput_frame = ttk.Frame(window) 
+        #input
+        imput_frame = ttk.Frame(self.parent) 
         entryString = tk.StringVar()
         entry = ttk.Entry(imput_frame, textvariable = entryString)
-        button = ttk.Button(imput_frame, text = 'Download',  command = download(entryString, entryPath))
+        button = ttk.Button(imput_frame, text = 'Download',  command = self.download)
 
         entry.pack(side = 'left', padx = 10)
         button.pack(side = 'left')
@@ -59,6 +57,53 @@ class UI(ttk.Frame):
         #exit
         exit_button = ttk.Button(text="Quit", command=self.parent.quit)
         exit_button.pack()
+        
+    def download(self):
+    
+        try:
+            url = self.entryString.get()
+            video = YouTube(url)#video
+            print(f'Title: {video.title}')
+            print('Dowloading...')
+            audio_video_selector = self.selection()
+            extension = '.mp'
+
+            if not audio_video_selector:
+                extension += "4"
+            else:
+                extension +="3"
+
+            out_path = video.streams.filter(only_audio=False).first().download(self.entryPath.get())#download
+            new_name = os.path.splitext(out_path)#original name
+            os.rename(out_path, new_name[0] + extension) 
+
+            MessageBox.showinfo('','Done!')
+            print('Finished')
+        except:
+            MessageBox.showerror('', 'Path or entry error!')
+
+    def get_path(self):
+        filename = filedialog.askdirectory()
+        self.entry_path.insert(0,filename)
+    
+    def check_extension(selector:bool)->str:
+        if selector:
+            res = True
+        return res
+    
+    
+    def selection()->bool:
+        '''
+        res = None
+        if var1.get():
+            res = True
+            c2.config()
+        elif var2.get():
+            res = False
+
+        return res
+        '''
+        return True
 
 if __name__ == '__main__':
         window = ttk.Window()
@@ -66,8 +111,6 @@ if __name__ == '__main__':
         APP = UI(window)
         APP.mainloop()
 
-
-#input 
 
 
 
