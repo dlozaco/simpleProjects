@@ -17,7 +17,7 @@ def download():
         print(f'Title: {video.title}')
         print('Dowloading...')
         audio_video_selector = selection()
-        extension = '.mp'
+        extension = ".mp"
 
         if not audio_video_selector:
             extension += "4"
@@ -74,11 +74,13 @@ var1 = tk.BooleanVar()
 var2 = tk.BooleanVar()
 path = ttk.Button(path_frame,  text = 'Path:', command=get_path)
 entry_path = ttk.Entry(path_frame, textvariable= entryPath)
+'''
 c1 = ttk.Checkbutton(path_frame, text="mp4",variable=var1, onvalue=True, offvalue=False, command=selection)
 c2 = ttk.Checkbutton(path_frame, text="mp3",variable=var2, onvalue=True, offvalue=False, command=selection)
 
 c1.pack(side="right")
 c2.pack(side="right")
+'''
 path.pack(side = 'left', padx=10)
 entry_path.pack(side = 'left')
 path_frame.pack()
