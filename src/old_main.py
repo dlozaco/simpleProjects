@@ -10,21 +10,23 @@ import ttkbootstrap as ttk
 from pytube import YouTube
 import os
 
+# VERSIÓN SIN SELECTOR DE MP3 Y MP4
+
 def download():
     try:
         url = entryString.get()
         video = YouTube(url)#video
         print(f'Title: {video.title}')
         print('Dowloading...')
-        audio_video_selector = selection()
+        #audio_video_selector = selection()
         extension = ".mp"
-
+        '''
         if not audio_video_selector:
             extension += "4"
         else:
             extension +="3"
-
-        out_path = video.streams.filter(only_audio=False).first().download(entryPath.get())#download
+        '''
+        out_path = video.streams.filter(only_audio=True).first().download(entryPath.get())#download
         new_name = os.path.splitext(out_path)#original name
         os.rename(out_path, new_name[0] + extension) 
 
@@ -41,7 +43,7 @@ def check_extension(selector:bool)->str:
     if selector:
         res = True
     return res
-
+'''
 def selection()->bool:
     res = None
     if var1.get():
@@ -51,7 +53,7 @@ def selection()->bool:
         res = False
 
     return res
-
+'''
 
 #window
 window = ttk.Window()
